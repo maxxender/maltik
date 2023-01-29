@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MALTIK - Services de créations de votre site web pas cher</title>
+</head>
+<body>
+    <header>
+        <h1>MALTIK</h1>
+        <nav>
+            <a href="./">ACCUEIL</a>
+            <a href="connexion.html">CONNEXION</a>
+            <a href="commandez-site.html">COMMANDEZ SITE WEB</a>
+            <a href="se-formez.html">SE FORMEZ</a>
+        </nav>
+    </header>
+
+    <div class="cours">
+    </div>
+  
+    <div id="se-formez.html#informations" >
+        <h3>COMMENT VA SE PASSER LE COURS</h3>
+        <p>
+            Une fois inscrits et les frais d'abonnement payé, vous serez redirigez vers votre page personnel.
+            Sur votre page personnel, vous auez un calendrier, sur lequel vous fixerez l'heure ou débuera chaque cours pour les 05 prochains jours.
+            Selectionnez un créneau parmi ceux proposé par votre formateur et c'est tout.
+        </p>
+        <div>
+            <h4>RIEN QUE DES AVANTAGES SI VOUS SUIVEZ NOTRE FORMATION</h4>
+            <ol>
+                <li>Chaque cours est personnalisé, votre formateur est entirement concentré sur vous pendant les heures d'aprentissage</li>
+                <li>Le cours est entirement en ligne, une petite connexion internet suffit</li>
+                <li>Cours sur tous supports, telephone, ipad, ordinateur</li>
+                <li>Pas de cours en fichier PDF, pas de cours en vidéo à regarder sans rien faire. Nos cours sont en instantané, discutez directement
+                    avec votre formateur, en live, travaillez ensemble pour vous améliorez chaque jour
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        function ajaxJson(eleContaint){
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'http://localhost/maltik/php/getAllCours.php');
+            xhr.send(null);
+            xhr.onreadystatechange = function(){
+                try{
+                    if(xhr.readyState === XMLHttpRequest.DONE){
+                        if(xhr.status === 200){
+                            //console.log((JSON.parse(xhr.responseText)));
+                        
+                            allCours =  JSON.parse(xhr.responseText);
+                            for(var i = 0 ; i < allCours.length; i++){
+
+                                var CoursEle = document.createElement('div');
+                                var titreCoursEle = document.createElement('h3');
+                                var descriptionCoursEle = document.createElement('p');
+                                var afficheCoursEle = document.createElement('img');
+                                var buyLinkEle = document.createElement('a');
+
+                                afficheCoursEle.style.maxWidth = "200px";
+
+                                titreCoursEle.innerText = allCours[i]['titre_cours'];
+                                descriptionCoursEle.innerText = allCours[i]['description_cours'];
+                                buyLinkEle.href = "http://localhost/maltik/php/suivre-cours.php?id=" + allCours[i]['id'] + "&idp=" + allCours[i]['id_prof'];
+                                buyLinkEle.innerText = 'suivre ce cours';
+
+                                afficheCoursEle.src = 'http://localhost/maltik/images/affiches_cours/' + allCours[i]['affiche_cours'];
+                                CoursEle.appendChild(titreCoursEle);
+                                CoursEle.appendChild(descriptionCoursEle);
+                                CoursEle.appendChild(afficheCoursEle);
+                                CoursEle.appendChild(buyLinkEle);
+
+                                eleContaint.appendChild(CoursEle);
+                            }
+                        }
+                    
+                    }else{
+                        console.log("probleme avec la requete : " + xhr.readyState);
+                        
+                    }
+                
+                }
+                catch(e){
+                    console.log("Une exception s’est produite : " + e);
+                }
+            }
+        }
+
+        ajaxJson(document.querySelector('.cours'));
+    </script>
+</body>
+</html>
