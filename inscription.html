@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MALTIK - Services de créations de votre site web pas cher</title>
+    <style>
+        .error{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>MALTIK</h1>
+        <nav>
+            <a href="./">ACCUEIL</a>
+            <a href="connexion.html">CONNEXION</a>
+            <a href="commandez-site.html">COMMANDEZ SITE WEB</a>
+            <a href="se-formez.html">SE FORMEZ</a>
+        </nav>
+    </header>
+
+    
+    <form method="post" action="php/inscription.php" >
+        <h2>Vous etes nouveau, inscrivez vous pour suivre ce cours. Pour les prochaines fois, une simple connexion suffira.</h2>
+      
+        <div class="form-part">
+            <input type="text"  id="prenom" placeholder="PRENOM" name="prenom">
+            <div class="error error-prenom">Prénom trop court.</div>
+        </div>
+        <div class="form-part">
+            <input type="mail" placeholder="EMAIL" id="email" name="email" >
+            <div class="error error-email">Email non valide. Réeesayez</div>
+        </div>
+        <div class="form-part">
+            <input type="password" name="mdp" id="mdp" placeholder="MOT DE PASSE" autocomplete="off" />
+            <div class="error error-mdp">Mot de passe non valide. Réeesayez</div>
+        </div>
+        <button type="submit">VALIDER</button>
+    </form>
+
+    <script>
+        verifInput(document.querySelector('#email'), document.querySelector('.error-email'), 5)
+        verifInput(document.querySelector('#prenom'), document.querySelector('.error-prenom'), 2);
+        verifInput(document.querySelector('#mdp'), document.querySelector('.error-mdp'), 5);
+
+        function verifInput(ele, errorBloc, limit){
+            ele.addEventListener('change',function(e){
+                if(ele.value.length < limit){
+                    errorBloc.style.display = "inline-block"
+                    document.querySelector('button').disabled = true;
+                }else{
+                    errorBloc.style.display = 'none'
+                    document.querySelector('button').disabled = false;
+                } 
+            });
+        }
+    </script>
+</body>
+</html>
