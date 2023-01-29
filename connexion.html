@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MALTIK - Services de créations de votre site web pas cher</title>
+    <style>
+        .error{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>MALTIK</h1>
+        <nav>
+            <a href="./">ACCUEIL</a>
+            <a href="connexion.html">CONNEXION</a>
+            <a href="commandez-site.html">COMMANDEZ SITE WEB</a>
+            <a href="se-formez.html">SE FORMEZ</a>
+        </nav>
+    </header>
+
+    
+    <form method="post" action="php/connexion.php" >
+        <div class="form-part">
+            <input type="mail" placeholder="EMAIL" id="email" name="email">
+            <div class="error error-email">Email non valide. Réeesayez</div>
+        </div>
+        <div class="form-part">
+            <input type="password" name="mdp" id="mdp" placeholder="MOT DE PASSE">
+            <div class="error error-mdp">Numéro de telephone non valide. Réeesayez</div>
+        </div>
+        <button type="submit">VALIDER</button>
+    </form>
+
+    <script>
+        verifInput(document.querySelector('#email'), document.querySelector('.error-email'), 5)
+        verifInput(document.querySelector('#mdp'), document.querySelector('.error-mdp', 5));
+        function verifInput(ele, errorBloc, limit){
+            ele.addEventListener('change',function(e){
+                if(ele.value.length < limit){
+                    errorBloc.style.display = "inline-block"
+                    document.querySelector('button').disabled = true;
+                }else{
+                    errorBloc.style.display = 'none'
+                    document.querySelector('button').disabled = false;
+                }
+            });
+        }
+
+        var form = document.querySelector('form');
+        form.addEventListener('submit',function(e){
+            e.preventDefault();
+            var data  = new FormData(form);
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState === 4){
+                    if(xhr.status === 200){
+                        console.log(JSON.parse(xhr.responseText));
+                        var response = JSON.parse(xhr.responseText);
+                        if(response[0] == 'success'){
+                            document.location.replace('dashboard.php');
+                        }
+                    }else{
+                        var errors = JSON.parse(xhr.responseText);
+                        console.log(errors);
+                    }
+                }
+            }
+            xhr.open('POST',form.getAttribute('action'),true);
+            xhr.setRequestHeader('X-Requested-With', 'xmlhttprequest');
+            xhr.send(data);
+        });
+
+        
+    </script>
+</body>
+</html>
