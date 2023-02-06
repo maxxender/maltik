@@ -26,13 +26,14 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 http_response_code(200);
                 die();
             }else{
-                if($email != $datas['email']){
-                    $erros[] = 'Email incorrect';
-                }else if(!password_verify( htmlspecialchars($_POST['mdp']), $hash)){
+                //if($email != $datas['email']){
+                  //  $erros[] = 'Email incorrect';
+                //}else if(!password_verify( htmlspecialchars($_POST['mdp']), $hash)){
                     $erros[] = 'Mot de passe incorrect';
-                }
+                //}
             }
-            $erros[] = $hash;
+        }else{
+            $erros[] = 'Email incorrect ou inexistant';
         }
 
    
