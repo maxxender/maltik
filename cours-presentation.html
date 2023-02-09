@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MALTIK - Services de créations de votre site web pas cher</title>
+</head>
+<body>
+    <header>
+        <h1>MALTIK</h1>
+        <nav>
+            <a href="">ACCUEIL</a>
+            <a href="connexion.html">CONNEXION</a>
+            <a href="commandez-site.html">COMMANDEZ SITE WEB</a>
+            <a href="se-formez.html">SE FORMEZ</a>
+        </nav>
+    </header>
+    <div>
+        <h3>Abonnement aux coaching</h3>
+        <h4>Commencer à gagnez de l'argent en ligne depuis l'afrique avec un coach personnel</h4>
+    </div>
+    <div class="cours">
+        <div class="cours-infos">
+            <h2 class="cours-titre" style="font-size: 2.4em;color:aqua"></h2>
+            <div class="cours-duree" style="color: brown;"></div>
+        </div>
+        <img src="" alt="" class="cours-affiche" style="max-width: 400px;" >
+        <div class="description_cours" style="color: blueviolet;">
+            A la fin de ce cours, vous saurez créez des services sur comeup.com, les faire valider et trouver vos premiers clients sur le site
+        </div>
+        <div class="prof-infos">
+            <div><span class="nom">BADAROU</span> <span class="prenom">MATINOU</span></div>
+            <div>Parce que je me suis inscrits sur comeup il y a 02 ans et que jai deja vendu 2990 services à des clients du monde entier</div>
+        </div>
+        <div class="competences-cours">
+            <h4>A la fin de cours, voici ce que vous saurez capable de faire</h4>
+          
+        </div>
+    </div>
+    <h3>Defninissez le programme du cours</h3>
+    <div>
+        <div class="horaires">
+            <h4>Selectionnez votre programme hebdomadaire</h4>
+            <select name="" id="">
+                <option value="">01 heures par jour</option>
+                <option value="">02 heures par jour</option>
+                <option value="">03 heures par jour</option>
+            </select>
+        </div>
+        <div class="hebdo">
+            <h4>Selectionnez votre programme hebdomadaire</h4>
+            <select name="" id="">
+                <option value="">02 jour par semaines</option>
+                <option value="">03 jours par semaines</option>
+                <option value="">04 jours par semaines</option>
+                <option value="">05 jours par semaines</option>
+            </select>
+        </div>
+
+        <div class="jours">
+            <h3>Choisissez vos jours de cours</h3>
+            <div class="jour__card">Lundi</div>
+            <div class="jour__card">Mardi</div>
+            <div class="jour__card">Mercredi</div>
+            <div class="jour__card">Jeudi</div>
+            <div class="jour__card">Vendredi</div>
+            <div class="jour__card">Samedi</div>
+            <div class="jour__card">Dimanche</div>
+        </div>
+      
+    </div>
+
+    <div class="prices-prev">
+        <div class="price-prev__price">10 000 f cfa</div>
+        <div class="price-prev__pay">
+            <button>Payer et commencer le cours</button>
+            <div><a class="lien-cours" href="">Suivre ce cours</a></div>
+        </div>
+    </div>
+    <footer>
+        <div>
+            <a href="./php/deconnexion.php">Déconnexion</a>
+        </div>
+    </footer>
+
+    <script>
+        const urlParams = window.location.search;
+        console.log(urlParams);
+        const params = new URLSearchParams(urlParams);
+        id_cours = params.get('id');
+        id_prof = params.get('idp');
+        if(isNaN(id_cours) || isNaN(id_prof)){
+            console.log('Pas le droit d etre ici');
+        }else{
+            document.querySelector('.lien-cours').setAttribute('href','http://localhost/maltik/php/suivre-cours.php?id=' + id_cours + '&idp=' + id_prof);
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState === 4){
+                    if(xhr.status === 200){
+                        const cours = JSON.parse(xhr.responseText);
+                        document.querySelector('.cours-titre').innerHTML = cours.titre_cours;
+                        document.querySelector('.description_cours').innerHTML = cours.description_cours;
+                        document.querySelector('.cours-duree').innerHTML = cours.duree_cours + " heures";
+                        document.querySelector('.nom').innerHTML = cours.nom;
+                        document.querySelector('.prenom').innerHTML = cours.prenom;
+                        console.log(document.querySelector('.cours-affiche'))
+                        document.querySelector('.cours-affiche').setAttribute('src','http://localhost/maltik/images/affiches_cours/'+cours.affiche_cours);
+                    }else{
+                        console.log(JSON.parse(xhr.responseText));
+                    }
+                }
+            }
+            xhr.open('GET', 'http://localhost/maltik/php/getCours.php?id=' + id_cours, true);
+            xhr.send();
+
+            var xhr2 = new XMLHttpRequest();
+            xhr2.onreadystatechange = function(){
+                if(xhr2.readyState === 4){
+                    if(xhr2.status === 200){
+                        console.log(JSON.parse(xhr2.responseText));
+                        const competences_cours = JSON.parse(xhr2.responseText);
+                        var CompetencesListingEle = document.createElement('ul');
+                     
+                        for(var i = 0; i < competences_cours.length; i++){
+                            var CompetenceEle = document.createElement('li');
+                            CompetenceEle.innerHTML = competences_cours[i]['contenu'];
+                            CompetencesListingEle.appendChild(CompetenceEle);
+                        }
+                        document.querySelector('.competences-cours').appendChild(CompetencesListingEle);
+                      
+                    }else{
+                        console.log(JSON.parse(xhr2.responseText));
+                    }
+                }
+            }
+            xhr2.open('GET', 'http://localhost/maltik/php/getCompetencesCours.php?id=' + id_cours, true);
+            xhr2.send();
+        }
+
+    </script>
+</body>
+</html>
